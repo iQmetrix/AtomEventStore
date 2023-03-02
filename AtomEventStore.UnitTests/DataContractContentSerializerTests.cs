@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit.Extensions;
-using Grean.AtomEventStore;
-using Xunit;
 using System.Xml;
 using System.Xml.Linq;
-using Ploeh.AutoFixture.Xunit;
-using Moq;
 using System.IO;
 using System.Runtime.Serialization;
 
@@ -121,7 +114,7 @@ namespace Grean.AtomEventStore.UnitTests
                 DataContractContentSerializer.Scan(null));
         }
 
-        [Theory, AutoData]
+        [Theory, AutoAtomData]
         public void ScanCorrectlySerializesAttributedClassInstance(
             DataContractTestEventX @event)
         {
@@ -139,7 +132,7 @@ namespace Grean.AtomEventStore.UnitTests
                 new XNodeEqualityComparer());
         }
 
-        [Theory, AutoData]
+        [Theory, AutoAtomData]
         public void ScanCanRoundTripAttributedClassInstance(
             DataContractTestEventX @event)
         {

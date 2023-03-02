@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grean.AtomEventStore.UnitTests.Demo.Visitor
 {
@@ -38,27 +36,27 @@ namespace Grean.AtomEventStore.UnitTests.Demo.Visitor
 
         public Guid Id
         {
-            get { return this.id; }
+            get { return id; }
         }
 
         public string Name
         {
-            get { return this.name; }
+            get { return name; }
         }
 
         public string Password
         {
-            get { return this.password; }
+            get { return password; }
         }
 
         public string Email
         {
-            get { return this.email; }
+            get { return email; }
         }
 
         public bool EmailVerified
         {
-            get { return this.emailVerified; }
+            get { return emailVerified; }
         }
     }
 }

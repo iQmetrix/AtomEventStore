@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -21,15 +17,15 @@ namespace Grean.AtomEventStore.UnitTests
             if (other == null)
             return base.Equals(obj);
 
-            return object.Equals(this.Number, other.Number)
-                && object.Equals(this.Text, other.Text);
+            return Equals(Number, other.Number)
+                && Equals(Text, other.Text);
         }
 
         public override int GetHashCode()
         {
             return
-                this.Number.GetHashCode() ^
-                this.Text.GetHashCode();
+                Number.GetHashCode() ^
+                Text.GetHashCode();
         }
 
         public IXmlAttributedTestEventVisitor Accept(

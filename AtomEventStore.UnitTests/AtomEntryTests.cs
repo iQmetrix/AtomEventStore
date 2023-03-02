@@ -2,17 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using Xunit.Extensions;
-using Grean.AtomEventStore;
-using Ploeh.AutoFixture.Xunit;
-using Ploeh.SemanticComparison.Fluent;
 using System.Xml;
 using System.Xml.Linq;
-using Ploeh.AutoFixture;
 using System.IO;
-using Moq;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -90,7 +82,7 @@ namespace Grean.AtomEventStore.UnitTests
 
             var expected = sut.AsSource().OfLikeness<AtomEntry>()
                 .With(x => x.Title).EqualsWhen(
-                    (s, d) => object.Equals(newTitle, d.Title));
+                    (s, d) => Equals(newTitle, d.Title));
             expected.ShouldEqual(actual);
         }
 
@@ -103,7 +95,7 @@ namespace Grean.AtomEventStore.UnitTests
 
             var expected = sut.AsSource().OfLikeness<AtomEntry>()
                 .With(x => x.Updated).EqualsWhen(
-                    (s, d) => object.Equals(newUpdated, d.Updated));
+                    (s, d) => Equals(newUpdated, d.Updated));
             expected.ShouldEqual(actual);
         }
 
@@ -116,7 +108,7 @@ namespace Grean.AtomEventStore.UnitTests
 
             var expected = sut.AsSource().OfLikeness<AtomEntry>()
                 .With(x => x.Author).EqualsWhen(
-                    (s, d) => object.Equals(newAuthor, d.Author));
+                    (s, d) => Equals(newAuthor, d.Author));
             expected.ShouldEqual(actual);
         }
 
@@ -129,7 +121,7 @@ namespace Grean.AtomEventStore.UnitTests
 
             var expected = sut.AsSource().OfLikeness<AtomEntry>()
                 .With(x => x.Content).EqualsWhen(
-                    (s, d) => object.Equals(newContent, d.Content));
+                    (s, d) => Equals(newContent, d.Content));
             expected.ShouldEqual(actual);
         }
 

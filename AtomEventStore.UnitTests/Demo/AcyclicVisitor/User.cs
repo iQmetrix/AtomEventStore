@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grean.AtomEventStore.UnitTests.Demo.AcyclicVisitor
 {
@@ -41,19 +39,19 @@ namespace Grean.AtomEventStore.UnitTests.Demo.AcyclicVisitor
         public User Accept(EmailVerified @event)
         {
             return new User(
-                this.id,
-                this.name,
-                this.password,
-                this.email,
+                id,
+                name,
+                password,
+                email,
                 true);
         }
 
         public User Accept(EmailChanged @event)
         {
             return new User(
-                this.id,
-                this.name,
-                this.password,
+                id,
+                name,
+                password,
                 @event.NewEmail,
                 false);
         }
@@ -62,11 +60,11 @@ namespace Grean.AtomEventStore.UnitTests.Demo.AcyclicVisitor
         {
             var emailChanged = @event as EmailChanged;
             if (emailChanged != null)
-                return this.Accept(emailChanged);
+                return Accept(emailChanged);
 
             var emailVerified = @event as EmailVerified;
             if (emailVerified != null)
-                return this.Accept(emailVerified);
+                return Accept(emailVerified);
 
             throw new ArgumentException("Unexpected event type.", "@event");
         }
@@ -80,38 +78,38 @@ namespace Grean.AtomEventStore.UnitTests.Demo.AcyclicVisitor
             if (created == null)
                 throw new ArgumentException("The first event must be a UserCreated instance.", "events");
 
-            var user = User.Create(created);
+            var user = Create(created);
             return rest.Aggregate(user, (u, e) => u.Accept(e));
         }
 
         public static User Fold(params object[] events)
         {
-            return User.Fold(events.AsEnumerable());
+            return Fold(events.AsEnumerable());
         }
 
         public Guid Id
         {
-            get { return this.id; }
+            get { return id; }
         }
 
         public string Name
         {
-            get { return this.name; }
+            get { return name; }
         }
 
         public string Password
         {
-            get { return this.password; }
+            get { return password; }
         }
 
         public string Email
         {
-            get { return this.email; }
+            get { return email; }
         }
 
         public bool EmailVerified
         {
-            get { return this.emailVerified; }
+            get { return emailVerified; }
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -19,11 +15,11 @@ namespace Grean.AtomEventStore.UnitTests
 
         public AtomEntry Build()
         {
-            return this.entry
-                .WithContent(this.entry.Content.WithItem(this.item))
+            return entry
+                .WithContent(entry.Content.WithItem(item))
                 .AddLink(AtomLink.CreateSelfLink(
                     new Uri(
-                        ((Guid)this.entry.Id).ToString(),
+                        ((Guid)entry.Id).ToString(),
                         UriKind.Relative)));
         }
 

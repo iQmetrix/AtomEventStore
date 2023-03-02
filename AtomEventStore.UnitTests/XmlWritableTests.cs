@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using Grean.AtomEventStore;
-using Xunit;
-using Xunit.Extensions;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -72,21 +65,21 @@ namespace Grean.AtomEventStore.UnitTests
                 string elementName,
                 string elementValue)
             {
-                this.documentName = documentElement;
+                documentName = documentElement;
                 this.elementName = elementName;
                 this.elementValue = elementValue;
             }
 
             public void WriteTo(XmlWriter xmlWriter)
             {
-                xmlWriter.WriteStartElement(this.documentName);
-                xmlWriter.WriteElementString(this.elementName, this.elementValue);
+                xmlWriter.WriteStartElement(documentName);
+                xmlWriter.WriteElementString(elementName, elementValue);
                 xmlWriter.WriteEndElement();
             }
 
             public void WriteTo(XmlWriter xmlWriter, IContentSerializer serializer)
             {
-                this.WriteTo(xmlWriter);
+                WriteTo(xmlWriter);
             }
         }
     }
