@@ -5,6 +5,7 @@
     <RootNamespace>Grean.AtomEventStore.AzureBlob</RootNamespace>
     <AssemblyName>Grean.AtomEventStore.AzureBlob</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DocumentationFile>bin\Release\Grean.AtomEventStore.AzureBlob.XML</DocumentationFile>

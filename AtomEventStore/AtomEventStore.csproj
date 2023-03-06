@@ -5,6 +5,7 @@
     <RootNamespace>Grean.AtomEventStore</RootNamespace>
     <AssemblyName>Grean.AtomEventStore</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DocumentationFile>bin\Release\Grean.AtomEventStore.XML</DocumentationFile>

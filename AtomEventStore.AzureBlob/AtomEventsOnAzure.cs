@@ -118,7 +118,7 @@ namespace Grean.AtomEventStore.AzureBlob
 
         private BlobClient CreateBlobReference(Uri href)
         {
-            return container.GetBlobClient(href.ToString() + ".xml");
+            return container.GetBlobClient($"{href}.xml");
         }
 
         /// <summary>
