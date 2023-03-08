@@ -7,14 +7,6 @@ namespace Grean.AtomEventStore.UnitTests
     public class AtomEventStreamTests
     {
 #pragma warning disable 618
-        [Theory(Skip = "Guard Clause Tests are weird"), AutoAtomData]
-        public void VerifyGuardClauses(GuardClauseAssertion assertion)
-        {
-            assertion.Verify(
-                typeof(AtomEventStream<DataContractTestEventX>).GetMembers()
-                    .Where(m => new Methods<AtomEventStream<DataContractTestEventX>>().Select(x => x.OnError(null)) != m));
-        }
-
         [Theory, AutoAtomData]
         public void IdIsCorrect(
             [Frozen]UuidIri expected,

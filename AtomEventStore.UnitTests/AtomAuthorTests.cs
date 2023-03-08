@@ -8,13 +8,6 @@ namespace Grean.AtomEventStore.UnitTests
 {
     public class AtomAuthorTests
     {
-        [Theory(Skip = "Guard Clause Tests are weird"), AutoAtomData]
-        public void VerifyGuardClauses(GuardClauseAssertion assertion)
-        {
-            assertion.Verify(
-                typeof(AtomAuthor).GetMembers().Where(m => m.Name != "WriteTo"));
-        }
-
         [Theory, AutoAtomData]
         public void NameIsCorrectWhenModestConstructorIsUsed(
             [Frozen]string expected,

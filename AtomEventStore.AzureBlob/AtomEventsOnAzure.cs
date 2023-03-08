@@ -17,13 +17,13 @@ namespace Grean.AtomEventStore.AzureBlob
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Suppressed following discussion at http://bit.ly/11T4eZe")]
     public class AtomEventsOnAzure : IAtomEventStorage, IEnumerable<UuidIri>
     {
-        private readonly BlobContainerClient container;
+        private readonly BlobContainerClient containerClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AtomEventsOnAzure" />
         /// class.
         /// </summary>
-        /// <param name="container">
+        /// <param name="containerClient">
         /// The BLOB container where all BLOBs written by this instance will
         /// reside.
         /// </param>
@@ -41,9 +41,9 @@ namespace Grean.AtomEventStore.AzureBlob
         /// </para>
         /// </remarks>
         [CLSCompliant(false)]
-        public AtomEventsOnAzure(BlobContainerClient container)
+        public AtomEventsOnAzure(BlobContainerClient containerClient)
         {
-            this.container = container;
+            this.containerClient = containerClient;
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Grean.AtomEventStore.AzureBlob
 
         private BlobClient CreateBlobReference(Uri href)
         {
-            return container.GetBlobClient($"{href}.xml");
+            return containerClient.GetBlobClient($"{href}.xml");
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Grean.AtomEventStore.AzureBlob
         /// <seealso cref="LifoEvents{T}" />
         public IEnumerator<UuidIri> GetEnumerator()
         {
-            return container.GetBlobsByHierarchy(delimiter: "/")
+            return containerClient.GetBlobsByHierarchy(delimiter: "/")
                 .Where(x => x.IsPrefix)
                 .Select(d => d.Prefix)
                 .Select(s => s.Trim('/'))

@@ -5,19 +5,6 @@ namespace Grean.AtomEventStore.UnitTests
 {
     public class Conventions
     {
-        [Theory(Skip = "Guard Clause Tests are weird"), AutoAtomData]
-        public void VerifyGuardClauses(GuardClauseAssertion assertion)
-        {
-            var representative = typeof(AtomEventStream);
-            var targets = from t in representative.Assembly.GetExportedTypes()
-                          where Include(t)
-                          from m in t.GetMembers()
-                          where m.Name != "TryParse"
-                          select m;
-
-            assertion.Verify(targets);
-        }
-
         private static bool Include(Type t)
         {
 #pragma warning disable 618

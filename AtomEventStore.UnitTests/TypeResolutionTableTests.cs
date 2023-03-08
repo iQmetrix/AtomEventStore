@@ -13,12 +13,6 @@ namespace Grean.AtomEventStore.UnitTests
             Assert.IsAssignableFrom<ITypeResolver>(sut);
         }
 
-        [Theory(Skip = "Guard Clause Tests are weird"), AutoAtomData]
-        public void VerifyGuardClauses(GuardClauseAssertion assertion)
-        {
-            assertion.Verify(typeof(TypeResolutionTable));
-        }
-
         [Theory, AutoAtomData]
         public void EntriesIsCorrectWhenInitializedWithArray(
             [Frozen]TypeResolutionEntry[] expected,

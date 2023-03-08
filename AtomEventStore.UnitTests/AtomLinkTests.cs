@@ -9,13 +9,6 @@ namespace Grean.AtomEventStore.UnitTests
 {
     public class AtomLinkTests
     {
-        [Theory(Skip = "Guard Clause Tests are weird"), AutoAtomData]
-        public void VerifyGuardClauses(GuardClauseAssertion assertion)
-        {
-            assertion.Verify(
-                typeof(AtomLink).GetMembers().Where(m => m.Name != "WriteTo"));
-        }
-
         [Theory, AutoAtomData]
         public void RelIsCorrect([Frozen]string expected, AtomLink sut)
         {
