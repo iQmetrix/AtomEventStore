@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -21,11 +19,11 @@ namespace Grean.AtomEventStore.UnitTests
 
         public AtomFeed Build()
         {
-            return this.feed
-                .WithEntries(this.entryBuilders.Select(b => b.Build()))
+            return feed
+                .WithEntries(entryBuilders.Select(b => b.Build()))
                 .AddLink(AtomLink.CreateSelfLink(
                     new Uri(
-                        ((Guid)this.feed.Id).ToString(),
+                        ((Guid)feed.Id).ToString(),
                         UriKind.Relative)));
         }
 

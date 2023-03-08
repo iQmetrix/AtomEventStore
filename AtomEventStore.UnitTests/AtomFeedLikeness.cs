@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -28,23 +25,23 @@ namespace Grean.AtomEventStore.UnitTests
             if (actual == null)
                 return base.Equals(obj);
 
-            var expectedEntries = this.expectedEvents
-                .Select(e => new AtomEntryLikeness(this.minimumTime, e))
+            var expectedEntries = expectedEvents
+                .Select(e => new AtomEntryLikeness(minimumTime, e))
                 .Cast<object>();
 
-            return object.Equals(this.expectedId, actual.Id)
-                && (object.Equals("Index of event stream " + (Guid)this.expectedId, actual.Title) || "Partial event stream" == actual.Title)
-                && this.minimumTime <= actual.Updated
+            return Equals(expectedId, actual.Id)
+                && (Equals("Index of event stream " + (Guid)expectedId, actual.Title) || "Partial event stream" == actual.Title)
+                && minimumTime <= actual.Updated
                 && actual.Updated <= DateTimeOffset.Now
                 && expectedEntries.SequenceEqual(actual.Entries)
-                && actual.Links.Any(this.IsExpectedSelfLink);
+                && actual.Links.Any(IsExpectedSelfLink);
         }
 
         private bool IsExpectedSelfLink(AtomLink link)
         {
             if (!link.IsSelfLink)
                 return false;
-            return GetIdFromHref(link.Href) == (Guid)this.expectedId;
+            return GetIdFromHref(link.Href) == (Guid)expectedId;
         }
 
         /* Copied from AtomEventStorage, suggesting a potential piece of API

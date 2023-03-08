@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -25,13 +21,13 @@ namespace Grean.AtomEventStore.UnitTests
             if (actual == null)
                 return base.Equals(obj);
 
-            return !object.Equals(default(UuidIri), actual.Id)
-                && object.Equals("Changeset " + (Guid)actual.Id, actual.Title)
-                && this.minimumTime <= actual.Published
+            return !Equals(default(UuidIri), actual.Id)
+                && Equals("Changeset " + (Guid)actual.Id, actual.Title)
+                && minimumTime <= actual.Published
                 && actual.Published <= DateTimeOffset.Now
-                && this.minimumTime <= actual.Updated
+                && minimumTime <= actual.Updated
                 && actual.Updated <= DateTimeOffset.Now
-                && object.Equals(this.expectedEvent, actual.Content.Item);
+                && Equals(expectedEvent, actual.Content.Item);
         }
 
         public override int GetHashCode()

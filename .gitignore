@@ -14,3 +14,6 @@ NuGetPackages/
 *.camrec
 *.camproj
 *.wav
+.vs/*
+packages
+packages/*

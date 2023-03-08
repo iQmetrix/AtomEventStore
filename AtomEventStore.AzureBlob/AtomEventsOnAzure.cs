@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Azure.Storage;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace Grean.AtomEventStore.AzureBlob
 {
@@ -15,13 +17,13 @@ namespace Grean.AtomEventStore.AzureBlob
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Suppressed following discussion at http://bit.ly/11T4eZe")]
     public class AtomEventsOnAzure : IAtomEventStorage, IEnumerable<UuidIri>
     {
-        private readonly CloudBlobContainer container;
+        private readonly BlobContainerClient containerClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AtomEventsOnAzure" />
         /// class.
         /// </summary>
-        /// <param name="container">
+        /// <param name="containerClient">
         /// The BLOB container where all BLOBs written by this instance will
         /// reside.
         /// </param>
@@ -39,9 +41,9 @@ namespace Grean.AtomEventStore.AzureBlob
         /// </para>
         /// </remarks>
         [CLSCompliant(false)]
-        public AtomEventsOnAzure(CloudBlobContainer container)
+        public AtomEventsOnAzure(BlobContainerClient containerClient)
         {
-            this.container = container;
+            this.containerClient = containerClient;
         }
 
         /// <summary>
@@ -67,7 +69,7 @@ namespace Grean.AtomEventStore.AzureBlob
         /// </remarks>
         public XmlReader CreateFeedReaderFor(Uri href)
         {
-            var blobRef = this.CreateBlobReference(href);
+            var blobRef = CreateBlobReference(href);
             if (blobRef.Exists())
                 return XmlReader.Create(
                     blobRef.OpenRead(),
@@ -100,22 +102,23 @@ namespace Grean.AtomEventStore.AzureBlob
             if (atomFeed == null)
                 throw new ArgumentNullException("atomFeed");
 
-            var blobRef = this.CreateBlobReference(atomFeed.Links);
-            blobRef.Properties.ContentType = "application/xml";
+            var blobRef = CreateBlobReference(atomFeed.Links);
+
             return XmlWriter.Create(
-                blobRef.OpenWrite(),
-                new XmlWriterSettings { CloseOutput = true });
+                blobRef.OpenWrite(true,
+                    new BlobOpenWriteOptions {HttpHeaders = new BlobHttpHeaders {ContentType = "application/xml"}}),
+                new XmlWriterSettings {CloseOutput = true});
         }
 
-        private CloudBlockBlob CreateBlobReference(IEnumerable<AtomLink> links)
+        private BlobClient CreateBlobReference(IEnumerable<AtomLink> links)
         {
             var selfLink = links.Single(l => l.IsSelfLink);
-            return this.CreateBlobReference(selfLink.Href);
+            return CreateBlobReference(selfLink.Href);
         }
 
-        private CloudBlockBlob CreateBlobReference(Uri href)
+        private BlobClient CreateBlobReference(Uri href)
         {
-            return this.container.GetBlockBlobReference(href.ToString() + ".xml");
+            return containerClient.GetBlobClient($"{href}.xml");
         }
 
         /// <summary>
@@ -139,21 +142,19 @@ namespace Grean.AtomEventStore.AzureBlob
         /// <seealso cref="LifoEvents{T}" />
         public IEnumerator<UuidIri> GetEnumerator()
         {
-            return this.container
-                .ListBlobs()
-                .OfType<CloudBlobDirectory>()
-                .Select(d => d.Uri.Segments.Last())
+            return containerClient.GetBlobsByHierarchy(delimiter: "/")
+                .Where(x => x.IsPrefix)
+                .Select(d => d.Prefix)
                 .Select(s => s.Trim('/'))
                 .Select(TryParseGuid)
                 .Where(t => t.Item1)
-                .Select(t => (UuidIri)t.Item2)
+                .Select(t => (UuidIri) t.Item2)
                 .GetEnumerator();
         }
 
         private static Tuple<bool, Guid> TryParseGuid(string candidate)
         {
-            Guid id;
-            var success = Guid.TryParse(candidate, out id);
+            var success = Guid.TryParse(candidate, out var id);
             return new Tuple<bool, Guid>(success, id);
         }
 
@@ -167,7 +168,7 @@ namespace Grean.AtomEventStore.AzureBlob
         /// <seealso cref="GetEnumerator()" />
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

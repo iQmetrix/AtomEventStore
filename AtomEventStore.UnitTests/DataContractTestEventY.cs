@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -20,16 +15,16 @@ namespace Grean.AtomEventStore.UnitTests
         {
             var other = obj as DataContractTestEventY;
             if (other != null)
-                return object.Equals(this.Number, other.Number)
-                    && object.Equals(this.IsTrue, other.IsTrue);
+                return Equals(Number, other.Number)
+                    && Equals(IsTrue, other.IsTrue);
             return base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
             return
-                this.Number.GetHashCode() ^
-                this.IsTrue.GetHashCode();
+                Number.GetHashCode() ^
+                IsTrue.GetHashCode();
         }
 
         public IDataContractTestEventVisitor Accept(

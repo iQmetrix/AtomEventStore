@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Xml;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -20,7 +15,7 @@ namespace Grean.AtomEventStore.UnitTests
         {
             return link
                 .ToXmlString(
-                    this.serializer,
+                    serializer,
                     new XmlWriterSettings { OmitXmlDeclaration = true })
                 .Replace("xmlns=\"http://www.w3.org/2005/Atom\"", "");
         }
@@ -29,7 +24,7 @@ namespace Grean.AtomEventStore.UnitTests
         {
             return entry
                 .ToXmlString(
-                    this.serializer,
+                    serializer,
                     new XmlWriterSettings { OmitXmlDeclaration = true })
                 .Replace("xmlns=\"http://www.w3.org/2005/Atom\"", "");
         }

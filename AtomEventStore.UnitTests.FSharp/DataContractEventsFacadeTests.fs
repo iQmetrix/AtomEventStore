@@ -4,8 +4,8 @@ open System
 open Grean.AtomEventStore
 open Grean.AtomEventStore.UnitTests.FSharp.DataContractRecords
 open Grean.AtomEventStore.UnitTests.FSharp.TestDsl
-open Ploeh.AutoFixture
-open Xunit.Extensions
+open AutoFixture
+open Xunit
 
 [<Theory; InMemoryDataContractConventions>]
 let SutCorrectlyRoundTripsASingleElement

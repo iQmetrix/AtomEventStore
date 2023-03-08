@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grean.AtomEventStore.UnitTests.Demo.Visitor
 {
@@ -22,7 +19,7 @@ namespace Grean.AtomEventStore.UnitTests.Demo.Visitor
 
         public IEnumerable<User> Users
         {
-            get { return this.users; }
+            get { return users; }
         }
 
         public IUserVisitor Visit(UserCreated @event)
@@ -33,19 +30,19 @@ namespace Grean.AtomEventStore.UnitTests.Demo.Visitor
                 @event.Password,
                 @event.Email,
                 false);
-            return new UserVisitor(this.users.Concat(new[] { user }));
+            return new UserVisitor(users.Concat(new[] { user }));
         }
 
         public IUserVisitor Visit(EmailVerified @event)
         {
-            var origUser = this.users.Single(u => u.Id == @event.UserId);
+            var origUser = users.Single(u => u.Id == @event.UserId);
             var newUser = new User(
                 origUser.Id,
                 origUser.Name,
                 origUser.Password,
                 origUser.Email,
                 true);
-            var newUsers = this.users
+            var newUsers = users
                 .Where(u => u.Id != newUser.Id)
                 .Concat(new[] { newUser });
             return new UserVisitor(newUsers);
@@ -53,14 +50,14 @@ namespace Grean.AtomEventStore.UnitTests.Demo.Visitor
 
         public IUserVisitor Visit(EmailChanged @event)
         {
-            var origUser = this.users.Single(u => u.Id == @event.UserId);
+            var origUser = users.Single(u => u.Id == @event.UserId);
             var newUser = new User(
                 origUser.Id,
                 origUser.Name,
                 origUser.Password,
                 @event.NewEmail,
                 false);
-            var newUsers = this.users
+            var newUsers = users
                 .Where(u => u.Id != newUser.Id)
                 .Concat(new[] { newUser });
             return new UserVisitor(newUsers);

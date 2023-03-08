@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Grean.AtomEventStore.UnitTests
@@ -24,8 +21,8 @@ namespace Grean.AtomEventStore.UnitTests
             if (other == null)
                 return base.Equals(obj);
 
-            return object.Equals(this.Id, other.Id)
-                && this.Items.SequenceEqual(other.Items);
+            return Equals(Id, other.Id)
+                && Items.SequenceEqual(other.Items);
         }
 
         public override int GetHashCode()

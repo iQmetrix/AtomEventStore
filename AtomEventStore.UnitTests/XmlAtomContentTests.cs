@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Grean.AtomEventStore;
-using Ploeh.AutoFixture.Xunit;
-using Xunit;
-using Xunit.Extensions;
-using Ploeh.SemanticComparison.Fluent;
 using System.Xml;
 using System.Xml.Linq;
 using System.IO;
@@ -34,7 +26,7 @@ namespace Grean.AtomEventStore.UnitTests
 
             var expected = actual.AsSource().OfLikeness<XmlAtomContent>()
                 .With(x => x.Item).EqualsWhen(
-                    (s, d) => object.Equals(newItem, s.Item));
+                    (s, d) => Equals(newItem, s.Item));
             expected.ShouldEqual(actual);
         }
 

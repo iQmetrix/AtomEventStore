@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -11,16 +9,16 @@ namespace Grean.AtomEventStore.UnitTests
 
         public AtomFeedComparer()
         {
-            this.entryComparer = new AtomEntryComparer();
+            entryComparer = new AtomEntryComparer();
         }
 
         public bool Equals(AtomFeed x, AtomFeed y)
         {
-            return object.Equals(x.Id, y.Id)
-                && object.Equals(x.Title, x.Title)
-                && object.Equals(x.Updated, y.Updated)
-                && object.Equals(x.Author, y.Author)
-                && x.Entries.SequenceEqual(y.Entries, this.entryComparer)
+            return Equals(x.Id, y.Id)
+                && Equals(x.Title, x.Title)
+                && Equals(x.Updated, y.Updated)
+                && Equals(x.Author, y.Author)
+                && x.Entries.SequenceEqual(y.Entries, entryComparer)
                 && new HashSet<AtomLink>(x.Links).SetEquals(y.Links);
         }
 

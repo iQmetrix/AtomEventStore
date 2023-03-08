@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Grean.AtomEventStore.UnitTests
 {
@@ -23,8 +19,8 @@ namespace Grean.AtomEventStore.UnitTests
             if (obj is DataContractEnvelope<T>)
             {
                 var other = (DataContractEnvelope<T>)obj;
-                return object.Equals(this.Id, other.Id)
-                    && object.Equals(this.Item, other.Item);
+                return Equals(Id, other.Id)
+                    && Equals(Item, other.Item);
             }
 
             return base.Equals(obj);
@@ -39,8 +35,8 @@ namespace Grean.AtomEventStore.UnitTests
         {
             return new DataContractEnvelope<TResult>
             {
-                Id = this.Id,
-                Item = (TResult)(object)this.Item
+                Id = Id,
+                Item = (TResult)(object)Item
             };
         }
     }
