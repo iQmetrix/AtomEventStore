@@ -270,7 +270,7 @@ namespace Grean.AtomEventStore
             AtomEntry entry,
             AppendContext context)
         {
-            var newAddress = this.CreateNewFeedAddress();
+            var newAddress = this.CreateNewFeedAddress(context.LastPage.Id);
             var newPage = this.ReadPage(newAddress);
             newPage = AddEntryTo(newPage, entry, context.Now);
 
@@ -308,9 +308,13 @@ namespace Grean.AtomEventStore
                 try { this.Write(context.Index); } catch { }
         }
 
-        private Uri CreateNewFeedAddress()
+        private Uri CreateNewFeedAddress(UuidIri previousId = default)
         {
-            var indexedAddress = ((Guid)this.id) + "/" + Guid.NewGuid();
+            var isNumbered = GuidExtensions.TryParseLong(previousId, out var previousNumber);
+
+            var newNumber = !isNumbered ? 1 : previousNumber + 1;
+
+            var indexedAddress = (Guid)id + "/" + newNumber.ToGuid();
             return new Uri(indexedAddress, UriKind.Relative);
         }
 
