@@ -270,11 +270,17 @@ namespace Grean.AtomEventStore
             AtomEntry entry,
             AppendContext context)
         {
-            var newAddress = this.CreateNewFeedAddress();
+            var newAddress = this.CreateNewFeedAddress(context.LastPage.Id);
+            var nextLink = AtomLink.CreateNextLink(newAddress);
+            var index = context.Index.WithLinks(context.Index.Links
+                .Where(l => !l.IsLastLink)
+                .Concat(new[] { nextLink.ToLastLink() }));
+            try { this.Write(index); } catch { }
+
             var newPage = this.ReadPage(newAddress);
             newPage = AddEntryTo(newPage, entry, context.Now);
 
-            var nextLink = AtomLink.CreateNextLink(newAddress);
+            
 
             var previousPage = context.LastPage
                 .WithLinks(context.LastPage.Links.Concat(new[] { nextLink }));
@@ -285,13 +291,10 @@ namespace Grean.AtomEventStore
 
             newPage = newPage.WithLinks(
                 newPage.Links.Concat(new[] { previousLink }));
-            var index = context.Index.WithLinks(context.Index.Links
-                .Where(l => !l.IsLastLink)
-                .Concat(new[] { nextLink.ToLastLink() }));
 
             this.Write(newPage);
             this.Write(previousPage);
-            try { this.Write(index); } catch { }
+            
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Since the offending exception handling block wraps around a piece of behaviour that ultimately is implemented behind an interface, there's no way to know what type of exception can be thrown. Since it's important to suppress any exceptions in this special case, all exception types must be suppressed. Frankly, I can't think of a better solution, but I'm open to suggestions.")]
@@ -308,9 +311,19 @@ namespace Grean.AtomEventStore
                 try { this.Write(context.Index); } catch { }
         }
 
-        private Uri CreateNewFeedAddress()
+        private Uri CreateLockFileAddress()
         {
-            var indexedAddress = ((Guid)this.id) + "/" + Guid.NewGuid();
+            var indexedAddress = (Guid)this.id + "/" + Guid.Parse("4d8c0b47-190b-4622-a216-98c2171f84ae");
+            return new Uri(indexedAddress, UriKind.Relative);
+        }
+
+        private Uri CreateNewFeedAddress(UuidIri previousId = default)
+        {
+            var isNumbered = GuidExtensions.TryParseLong(previousId, out var previousNumber);
+
+            var newNumber = !isNumbered ? 1 : previousNumber + 1;
+
+            var indexedAddress = (Guid)id + "/" + newNumber.ToGuid();
             return new Uri(indexedAddress, UriKind.Relative);
         }
 
